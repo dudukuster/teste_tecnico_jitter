@@ -36,18 +36,27 @@ const criarPedido = async (body) => {
     items.map((item) => ({ ...item, orderId }))
   );
 
-  return { ...pedido.toJSON(), items: itensCriados };
+  // Remove id e orderId dos itens antes de retornar
+  const itensSemId = itensCriados.map(item => {
+    const { productId, quantity, price } = item.toJSON();
+    return { productId, quantity, price };
+  });
+
+  return { ...pedido.toJSON(), items: itensSemId };
 };
+
+// Retorna apenas os campos necessários dos itens
+const itemAttributes = ['productId', 'quantity', 'price'];
 
 // Retorna todos os pedidos com seus itens
 const listarPedidos = async () => {
-  return Order.findAll({ include: [{ model: Item, as: 'items' }] });
+  return Order.findAll({ include: [{ model: Item, as: 'items', attributes: itemAttributes }] });
 };
 
 // Retorna um pedido pelo ID com seus itens
 const buscarPedido = async (orderId) => {
   const pedido = await Order.findByPk(orderId, {
-    include: [{ model: Item, as: 'items' }],
+    include: [{ model: Item, as: 'items', attributes: itemAttributes }],
   });
 
   if (!pedido) {
@@ -83,7 +92,7 @@ const atualizarPedido = async (orderId, body) => {
     await Item.bulkCreate(items.map((item) => ({ ...item, orderId })));
   }
 
-  return Order.findByPk(orderId, { include: [{ model: Item, as: 'items' }] });
+  return Order.findByPk(orderId, { include: [{ model: Item, as: 'items', attributes: itemAttributes }] });
 };
 
 // Remove um pedido e seus itens do banco de dados
