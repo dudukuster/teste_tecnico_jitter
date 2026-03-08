@@ -4,9 +4,8 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
 const sequelize = require('./config/database');
 
-// Importa os models para que o Sequelize registre as tabelas
-require('./models/Order');
-require('./models/Item');
+// Importa os models e associações
+require('./models');
 
 const authRoutes = require('./routes/authRoutes');
 const orderRoutes = require('./routes/orderRoutes');

@@ -1,5 +1,4 @@
-const Order = require('../models/Order');
-const Item = require('../models/Item');
+const { Order, Item } = require('../models');
 
 /**
  * Mapeia o body da requisição (formato do cliente) para o formato do banco de dados.

@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const Order = require('./Order');
 
 // Model representando a tabela "items" no banco de dados
 const Item = sequelize.define('Item', {
@@ -12,10 +11,6 @@ const Item = sequelize.define('Item', {
   orderId: {
     type: DataTypes.STRING,
     allowNull: false,
-    references: {
-      model: Order,
-      key: 'orderId',
-    },
   },
   productId: {
     type: DataTypes.INTEGER,
@@ -33,9 +28,5 @@ const Item = sequelize.define('Item', {
   tableName: 'items',
   timestamps: false,
 });
-
-// Relacionamento: um pedido possui muitos itens
-Order.hasMany(Item, { foreignKey: 'orderId', as: 'items', onDelete: 'CASCADE' });
-Item.belongsTo(Order, { foreignKey: 'orderId' });
 
 module.exports = Item;
